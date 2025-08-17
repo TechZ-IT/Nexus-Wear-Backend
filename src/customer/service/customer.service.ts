@@ -1,10 +1,15 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from '../entity/customer.entity';
 import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from '../dto/login.dto';
 @Injectable()
 export class CustomerService {
   constructor(
@@ -46,5 +51,27 @@ export class CustomerService {
     }
 
     return savedCustomer;
+  }
+
+  async login(loginDto: LoginDto) {
+    const customer = await this.customerRepository.findOne({
+      where: { email: loginDto.email },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('Customer with this email not found');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      customer.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new ForbiddenException('Invalid password');
+    }
+
+    const { password, ...result } = customer;
+    return result;
   }
 }
