@@ -13,6 +13,7 @@ import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { LoginDto } from '../dto/login.dto';
 
 @Controller('customer')
 export class CustomerController {
@@ -27,5 +28,16 @@ export class CustomerController {
     @Body() createCustomerDto: CreateCustomerDto,
   ) {
     return this.customerService.create(createCustomerDto, image);
+  }
+
+  @Post('login')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  @HttpCode(HttpStatus.CREATED)
+  login(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() loginDto: LoginDto,
+  ) {
+    return this.customerService.login(loginDto);
   }
 }
