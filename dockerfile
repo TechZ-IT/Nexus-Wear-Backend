@@ -1,34 +1,19 @@
-FROM node:alpine
+FROM node:18-bullseye
 
-# Install Python and build dependencies required for canvas
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    cairo-dev \
-    jpeg-dev \
-    pango-dev \
-    musl-dev \
-    giflib-dev \
-    pixman-dev \
-    pangomm-dev \
-    libjpeg-turbo-dev \
-    freetype-dev
+# Install build deps for canvas
+RUN apt-get update && apt-get install -y \
+  python3 make g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/www/app
-
-# Create application directory
-RUN mkdir -p /var/www/app/uploads
-
-WORKDIR /var/www/app
+WORKDIR /app
 
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN yarn install
-
-COPY . ./
-
+COPY . .
 RUN yarn build
 
-EXPOSE 3012
+# Railway will inject PORT, so expose 3000
+EXPOSE 3000
+
 CMD ["yarn", "start:prod"]
