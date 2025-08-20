@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  nexus_wear_service:
+  ijrp_service:
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - '3009:3000'
+      - '3012:3000'
     volumes:
       - ./:/usr/src/app
     env_file:
