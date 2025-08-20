@@ -1,23 +1,19 @@
-# Use Node.js LTS
-FROM node:22-alpine
+FROM node:alpine
 
-WORKDIR /usr/src/app
+RUN mkdir -p /var/www/app
 
-# Install dependencies
+# Create application directory
+RUN mkdir -p /var/www/app/uploads
+
+WORKDIR /var/www/app
+
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
 
-# Copy source
-COPY . .
+RUN yarn install
 
-# Build
+COPY . ./
+
 RUN yarn build
 
-# Set Node memory limit
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
-# Expose port
-EXPOSE 3000
-
-# Start the app
-CMD ["node", "dist/main.js"]
+EXPOSE 3009
+CMD ["yarn", "start:dev"]
