@@ -7,6 +7,8 @@ import { CustomerModule } from './customer/module/customer.module';
 import * as dotenv from 'dotenv';
 import { R2UploadModule } from './r2-upload/module/r2-upload.module';
 import { RoleModule } from './role/module/role.module';
+import { AuthModule } from './auth/module/auth.module';
+import { AdminModule } from './admin/module/admin.module';
 
 dotenv.config();
 @Module({
@@ -27,6 +29,8 @@ dotenv.config();
     CustomerModule,
     R2UploadModule,
     RoleModule,
+    AuthModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
