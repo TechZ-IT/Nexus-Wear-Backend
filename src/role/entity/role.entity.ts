@@ -1,17 +1,15 @@
-// src/roles/entity/role.entity.ts
+
+import { Admin } from 'src/admin/entity/admin.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
-  JoinTable,
   OneToMany,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 
-
-@Entity('roles')
+@Entity('role')
 export class Role {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,9 +20,8 @@ export class Role {
   @Column({ nullable: true })
   description: string;
 
-
-//   @OneToMany(() => Admin, admin => admin.role)
-//   admins: Admin[];
+  @OneToMany(() => Admin, (admin) => admin.role)
+  admins: Admin[];
 
   @CreateDateColumn()
   createdAt: Date;
