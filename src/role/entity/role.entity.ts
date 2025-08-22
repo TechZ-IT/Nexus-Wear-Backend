@@ -23,9 +23,9 @@ export class Role {
   @OneToMany(() => Admin, (admin) => admin.role)
   admins: Admin[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({name:'created_at'})
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({name:'updated_at'})
   updatedAt: Date;
 }
