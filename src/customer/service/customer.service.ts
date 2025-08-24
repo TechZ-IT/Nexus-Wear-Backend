@@ -52,7 +52,18 @@ export class CustomerService {
       return this.customerRepository.save(savedCustomer); // update with image
     }
 
-    return savedCustomer;
+    const token = this.authService.generateToken({
+      id: savedCustomer.id,
+      email: savedCustomer.email,
+      role: 'customer',
+    });
+
+    return {
+      data: savedCustomer,
+      accessToken: token,
+      message: 'Customer Registered Successfully',
+      status: 'success',
+    };
   }
 
   async login(loginDto: LoginDto) {
