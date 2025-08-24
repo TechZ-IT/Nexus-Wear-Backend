@@ -10,12 +10,14 @@ import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from '../dto/login.dto';
+import { AuthService } from 'src/auth/service/auth.service';
 @Injectable()
 export class CustomerService {
   constructor(
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
     private readonly r2UploadService: R2UploadService,
+    private readonly authService: AuthService,
   ) {}
 
   async create(
@@ -71,7 +73,17 @@ export class CustomerService {
       throw new ForbiddenException('Invalid password');
     }
 
-    const { password, ...result } = customer;
-    return result;
+    const token = this.authService.generateToken({
+      id: customer.id,
+      email: customer.email,
+      role: 'customer',
+    });
+
+    return {
+      data: customer,
+      accessToken: token,
+      message: 'Login Successful',
+      status: 'success',
+    };
   }
 }
