@@ -41,15 +41,15 @@ export class CustomerService {
     const savedCustomer = await this.customerRepository.save(customer);
 
     if (imageFile) {
-      const imageUploadResult = await this.r2UploadService.uploadAdminImage(
+      const imageUploadResult = await this.r2UploadService.uploadCustomerImage(
         imageFile,
-        savedCustomer.id, // now id exists
+        savedCustomer.id,
       );
       if (!imageUploadResult) {
         throw new Error('Failed to upload image');
       }
       savedCustomer.image = imageUploadResult;
-      return this.customerRepository.save(savedCustomer); // update with image
+      await this.customerRepository.save(savedCustomer);
     }
 
     const token = this.authService.generateToken({
