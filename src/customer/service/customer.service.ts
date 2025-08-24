@@ -9,7 +9,7 @@ import { Customer } from '../entity/customer.entity';
 import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from '../dto/login.dto';
+import { LoginCustomerDto } from '../dto/login-customer.dto';
 import { AuthService } from 'src/auth/service/auth.service';
 @Injectable()
 export class CustomerService {
@@ -66,7 +66,7 @@ export class CustomerService {
     };
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginCustomerDto) {
     const customer = await this.customerRepository.findOne({
       where: { email: loginDto.email },
     });
