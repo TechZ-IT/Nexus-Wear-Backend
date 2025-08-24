@@ -6,8 +6,9 @@ import { AuthModule } from 'src/auth/module/auth.module';
 import { RoleController } from '../controller/role.controller';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Role]),AuthModule],
+  imports: [TypeOrmModule.forFeature([Role]), AuthModule],
   controllers: [RoleController],
-  providers: [RoleService]
+  providers: [RoleService],
+  exports: [RoleService],
 })
 export class RoleModule {}
