@@ -28,7 +28,7 @@ export class CustomerService {
     const existingCustomer = await this.customerRepository.findOne({
       where: { email: createCustomerDto.email },
     });
-    console.log(existingCustomer);
+    // console.log(existingCustomer);
 
     if (existingCustomer) {
       throw new ForbiddenException('Customer with this email already exists');

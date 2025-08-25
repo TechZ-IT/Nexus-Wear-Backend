@@ -15,5 +15,4 @@ export class LoginCustomerDto {
   })
   @IsString()
   password: string;
-
 }
