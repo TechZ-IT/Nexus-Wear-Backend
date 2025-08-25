@@ -15,6 +15,7 @@ import {
   FileInterceptor,
 } from '@nestjs/platform-express';
 import { CreateAdminDto } from '../dto/create-admin.dto';
+import { LoginAdminDto } from '../dto/login-admin.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -29,5 +30,11 @@ export class AdminController {
     @UploadedFiles() files: { image: Express.Multer.File },
   ) {
     return this.adminService.create(createAdminDto, files.image?.[0]);
+  }
+
+  @Post('login')
+  @HttpCode(HttpStatus.CREATED)
+  login(@Body() loginDto: LoginAdminDto) {
+    return this.adminService.login(loginDto);
   }
 }

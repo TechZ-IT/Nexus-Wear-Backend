@@ -28,7 +28,7 @@ export class AdminService {
     const existingAdmin = await this.adminRepository.findOne({
       where: { email: createAdminDto.email },
     });
-    console.log(existingAdmin);
+    // console.log(existingAdmin);
     if (existingAdmin) {
       throw new ForbiddenException('Admin with this email already exists');
     }
@@ -77,7 +77,7 @@ export class AdminService {
     console.log(savedAdmin.role);
 
     return {
-      data: savedAdmin,
+      data: adminInfo,
       accessToken: token,
       message: 'Admin Registered Successfully',
       status: 'success',
@@ -99,6 +99,25 @@ export class AdminService {
       throw new ForbiddenException('Invalid password');
     }
 
-    const token = this.authService.generateToken({});
+    const adminInfo = await this.adminRepository.findOne({
+      where: { email: admin.email },
+      relations: ['role'],
+    });
+
+    if (!adminInfo) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    const token = this.authService.generateToken({
+      id: admin.id,
+      email: admin.email,
+      role: adminInfo.role.name,
+    });
+    return {
+      data: adminInfo,
+      accessToken: token,
+      message: 'Admin login successful!',
+      status: 'success',
+    };
   }
 }
