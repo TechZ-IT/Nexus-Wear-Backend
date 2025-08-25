@@ -1,7 +1,11 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,7 +13,7 @@ async function bootstrap() {
   app.enableCors();
 
   // app.enableVersioning({ type: VersioningType.URI });
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -20,10 +24,10 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Dress Hut')
-    .setDescription('The Dress Hut API description')
+    .setTitle('Nexus Wear Backend')
+    .setDescription('The Nexus Wear API description')
     .setVersion('1.0')
-    .addTag('dress-hut')
+    .addTag('nexus-wear')
     .addBearerAuth({
       type: 'http',
       scheme: 'bearer',
