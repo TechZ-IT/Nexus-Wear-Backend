@@ -31,11 +31,8 @@ export class CustomerController {
   }
 
   @Post('login')
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('image'))
   @HttpCode(HttpStatus.CREATED)
   login(
-    @UploadedFile() image: Express.Multer.File,
     @Body() loginDto: LoginCustomerDto,
   ) {
     return this.customerService.login(loginDto);
