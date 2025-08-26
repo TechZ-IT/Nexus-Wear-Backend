@@ -32,9 +32,7 @@ export class CustomerController {
 
   @Post('login')
   @HttpCode(HttpStatus.CREATED)
-  login(
-    @Body() loginDto: LoginCustomerDto,
-  ) {
+  login(@Body() loginDto: LoginCustomerDto) {
     return this.customerService.login(loginDto);
   }
 }
