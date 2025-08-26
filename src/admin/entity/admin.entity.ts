@@ -1,20 +1,15 @@
 import { Exclude } from 'class-transformer';
+import { BaseEntity } from 'src/common/entities/Base.entity';
 import { Role } from 'src/role/entity/role.entity';
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
 @Entity('admin')
-export class Admin {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Admin extends BaseEntity {
   @Column()
   name: string;
 
@@ -37,10 +32,4 @@ export class Admin {
 
   @Column({ name: 'role_id' })
   roleId: number;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }
