@@ -1,17 +1,12 @@
 import { Exclude } from 'class-transformer';
+import { BaseEntity } from 'src/common/entities/Base.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('customer')
-export class Customer {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Customer extends BaseEntity {
   @Column()
   name: string;
 
@@ -42,10 +37,4 @@ export class Customer {
 
   @Column()
   country: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }
