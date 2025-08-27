@@ -7,34 +7,34 @@ import {
 
 @Entity('customer')
 export class Customer extends BaseEntity {
-  @Column()
-  name: string;
+  @Column({ nullable: true })
+  name?: string;
 
-  @Column()
-  email: string;
+  @Column({ nullable: true })
+  email?: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Exclude()
-  password: string;
+  password?: string;
 
-  @Column()
-  phone: string;
+  @Column({ nullable: true })
+  phone?: string;
 
   @Column({ nullable: true })
   image?: string;
 
-  @Column()
-  address: string;
+  @Column({ nullable: true })
+  address?: string;
 
-  @Column()
-  city: string;
+  @Column({ nullable: true })
+  city?: string;
 
-  @Column()
-  state: string;
+  @Column({ nullable: true })
+  state?: string;
 
-  @Column()
-  zipCode: string;
+  @Column({ nullable: true })
+  zipCode?: string;
 
-  @Column()
-  country: string;
+  @Column({ nullable: true })
+  country?: string;
 }

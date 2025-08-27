@@ -1,13 +1,14 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateCustomerDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Mr Customer',
     description: 'Name of the customer',
   })
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @ApiPropertyOptional({
     type: 'string',
@@ -17,59 +18,67 @@ export class CreateCustomerDto {
   @IsOptional()
   image?: Express.Multer.File;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'customer@gmail.com',
     description: 'Email of the customer',
   })
+  @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '123456',
     description: 'Password of the customer',
   })
+  @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '1234567890',
     description: 'Phone number of the customer',
   })
+  @IsOptional()
   @IsString()
-  phone: string;
+  phone?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '123 Main St, Dhaka, Bangladesh',
     description: 'Address of the customer',
   })
+  @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Dhaka',
     description: 'City of the customer',
   })
+  @IsOptional()
   @IsString()
-  city: string;
+  city?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '1200',
-    description: 'Zip code of the customer',
+    description: 'State of the customer',
   })
+  @IsOptional()
   @IsString()
-  state: string;
+  state?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '1212',
     description: 'Zip code of the customer',
   })
+  @IsOptional()
   @IsString()
-  zipCode: string;
+  zipCode?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Bangladesh',
     description: 'Country of the customer',
   })
+  @IsOptional()
   @IsString()
-  country: string;
+  country?: string;
 }
