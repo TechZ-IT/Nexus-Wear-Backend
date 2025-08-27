@@ -35,7 +35,9 @@ export class CustomerService {
     }
 
     // Hash the password before saving
-    customerData.password = await bcrypt.hash(customerData.password, 10);
+    if (customerData.password) {
+      customerData.password = await bcrypt.hash(customerData.password, 10);
+    }
 
     const customer = this.customerRepository.create(customerData);
     const savedCustomer = await this.customerRepository.save(customer);
@@ -73,6 +75,10 @@ export class CustomerService {
 
     if (!customer) {
       throw new NotFoundException('Customer with this email not found');
+    }
+
+    if (!customer.password || !loginDto.password) {
+      throw new Error('Password is missing');
     }
 
     const isPasswordValid = await bcrypt.compare(
