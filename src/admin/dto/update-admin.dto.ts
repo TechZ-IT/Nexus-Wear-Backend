@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { AdminStatus } from 'src/common/types/status.enum';
 
 export class UpdateAdminDto {
   @ApiPropertyOptional({
@@ -32,6 +33,27 @@ export class UpdateAdminDto {
   @IsOptional()
   @IsString()
   phone: string;
+
+  @ApiProperty({
+    example: 'Saver, Dhaka, Bangladesh',
+    description: 'Admin address line should be here',
+  })
+  @IsString()
+  addressLine: string;
+
+  @ApiProperty({
+    example: '3399 2884 44499',
+    description: 'Admin national id number should be here',
+  })
+  @IsString()
+  nationalId: string;
+
+  @ApiProperty({
+    default: AdminStatus.PENDING,
+    description: 'Admin national id number should be here',
+  })
+  @IsEnum(AdminStatus)
+  status: AdminStatus;
 
   @ApiPropertyOptional({
     example: 1,
