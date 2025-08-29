@@ -12,6 +12,7 @@ import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import { AuthService } from 'src/auth/service/auth.service';
 import { LoginAdminDto } from '../dto/login-admin.dto';
 import { RoleService } from 'src/role/service/role.service';
+import { AdminStatus } from 'src/common/types/status.enum';
 
 @Injectable()
 export class AdminService {
@@ -119,5 +120,33 @@ export class AdminService {
       message: 'Admin login successful!',
       status: 'success',
     };
+  }
+
+  async findAll({
+    limit = 10,
+    page = 1,
+    status,
+  }: {
+    limit: number;
+    page: number;
+    status?: AdminStatus;
+  }): Promise<{ data: Admin[]; total: number; page: number; limit: number }> {
+    const query = this.adminRepository
+      .createQueryBuilder('admin')
+      .leftJoinAndSelect('admin.role', 'role')
+      .orderBy('admin.id', 'DESC');
+
+    if (status) {
+      query.andWhere('admin.status LIKE status', {
+        status,
+      });
+    }
+
+    //pagination
+    query.skip((page - 1) * limit).take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return { data, limit, total, page };
   }
 }
