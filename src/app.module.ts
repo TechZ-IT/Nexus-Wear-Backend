@@ -28,6 +28,7 @@ import { SubscriberModule } from './subscriber/module/subscriber.module';
 import { StatisticsModule } from './statistics/module/statistics.module';
 import { NotificationModule } from './notification/module/notification.module';
 import { SocialModule } from './social/module/social.module';
+import { AddressBookModule } from './address-book/module/address-book.module';
 
 dotenv.config();
 @Module({
@@ -44,6 +45,7 @@ dotenv.config();
     }),
     ConfigModule.forRoot({
       isGlobal: true,
+      
     }),
     CustomerModule,
     R2UploadModule,
@@ -69,8 +71,10 @@ dotenv.config();
     StatisticsModule,
     NotificationModule,
     SocialModule,
+    AddressBookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+// 
