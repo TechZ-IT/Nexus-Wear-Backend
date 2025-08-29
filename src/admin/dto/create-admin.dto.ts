@@ -2,11 +2,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { AdminStatus } from 'src/common/types/status.enum';
 
 export class CreateAdminDto {
   @ApiProperty({
@@ -47,6 +49,29 @@ export class CreateAdminDto {
   @IsString()
   @IsNotEmpty()
   phone: string;
+
+  @ApiProperty({
+    example: 'Saver, Dhaka, Bangladesh',
+    description: 'Admin address line should be here',
+  })
+  @IsString()
+  @IsNotEmpty()
+  addressLine: string;
+
+  @ApiProperty({
+    example: '3399 2884 44499',
+    description: 'Admin national id number should be here',
+  })
+  @IsString()
+  @IsNotEmpty()
+  nationalId: string;
+
+  @ApiProperty({
+    default: AdminStatus.PENDING,
+    description: 'Admin national id number should be here',
+  })
+  @IsEnum(AdminStatus)
+  status: AdminStatus;
 
   @ApiPropertyOptional({
     example: 1,

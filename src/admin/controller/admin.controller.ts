@@ -1,21 +1,24 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { AdminService } from '../service/admin.service';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import {
   FileFieldsInterceptor,
   FileInterceptor,
 } from '@nestjs/platform-express';
 import { CreateAdminDto } from '../dto/create-admin.dto';
 import { LoginAdminDto } from '../dto/login-admin.dto';
+import { AdminStatus } from 'src/common/types/status.enum';
 
 @Controller('admin')
 export class AdminController {
@@ -36,5 +39,18 @@ export class AdminController {
   @HttpCode(HttpStatus.CREATED)
   login(@Body() loginDto: LoginAdminDto) {
     return this.adminService.login(loginDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all admins' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'status', required: false, type: String })
+  findAll(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+    @Query('status') status?: AdminStatus,
+  ) {
+    return this.adminService.findAll({ page, limit, status });
   }
 }
