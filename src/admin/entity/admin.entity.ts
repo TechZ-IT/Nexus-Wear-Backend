@@ -1,12 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/Base.entity';
+import { AdminStatus } from 'src/common/types/status.enum';
 import { Role } from 'src/role/entity/role.entity';
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('admin')
 export class Admin extends BaseEntity {
@@ -18,6 +14,12 @@ export class Admin extends BaseEntity {
 
   @Column()
   phone: string;
+
+  @Column({ nullable: true })
+  addressLine: string;
+
+  @Column({ name: 'national_id', nullable: true })
+  nationalId: string;
 
   @Column()
   @Exclude()
@@ -32,4 +34,7 @@ export class Admin extends BaseEntity {
 
   @Column({ name: 'role_id' })
   roleId: number;
+
+  @Column({ default: AdminStatus.PENDING })
+  status: AdminStatus;
 }
