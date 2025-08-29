@@ -26,6 +26,8 @@ import { ReviewModule } from './review/module/review.module';
 import { BannerModule } from './banner/module/banner.module';
 import { SubscriberModule } from './subscriber/module/subscriber.module';
 import { StatisticsModule } from './statistics/module/statistics.module';
+import { NotificationModule } from './notification/module/notification.module';
+import { SocialModule } from './social/module/social.module';
 
 dotenv.config();
 @Module({
@@ -65,6 +67,8 @@ dotenv.config();
     BannerModule,
     SubscriberModule,
     StatisticsModule,
+    NotificationModule,
+    SocialModule,
   ],
   controllers: [AppController],
   providers: [AppService],
