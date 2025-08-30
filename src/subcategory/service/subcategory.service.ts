@@ -51,9 +51,11 @@ export class SubcategoryService {
   async findAll({
     limit = 10,
     page = 1,
+    categoryId,
   }: {
     limit: number;
     page: number;
+    categoryId?: number;
   }): Promise<{
     data: Subcategory[];
     limit: number;
@@ -64,6 +66,10 @@ export class SubcategoryService {
       .createQueryBuilder('subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
       .orderBy('subcategory.id', 'DESC');
+
+    if (categoryId) {
+      query.andWhere('subcategory.categoryId = :categoryId', { categoryId });
+    }
 
     query.skip((page - 1) * limit).take(limit);
     const [data, total] = await query.getManyAndCount();
