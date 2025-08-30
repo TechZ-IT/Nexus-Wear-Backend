@@ -48,5 +48,25 @@ export class SubcategoryService {
     };
   }
 
+  async findAll({
+    limit = 10,
+    page = 1,
+  }: {
+    limit: number;
+    page: number;
+  }): Promise<{
+    data: Subcategory[];
+    limit: number;
+    page: number;
+    total: number;
+  }> {
+    const query = this.subcategoryRepository
+      .createQueryBuilder('subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .orderBy('subcategory.id', 'DESC');
 
+    query.skip((page - 1) * limit).take(limit);
+    const [data, total] = await query.getManyAndCount();
+    return { data, limit, page, total };
+  }
 }
