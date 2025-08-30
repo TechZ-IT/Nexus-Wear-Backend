@@ -48,4 +48,23 @@ export class CategoryService {
       status: 'success',
     };
   }
+
+  async findAll({
+    page = 1,
+    limit = 10,
+  }: {
+    page: number;
+    limit: number;
+  }): Promise<{ data: Category[]; page; total; limit }> {
+    const query = this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.subcategory', 'subcategory')
+      .orderBy('category.id', 'DESC');
+
+    query.skip((page - 1) * limit).take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return { data, total, page, limit };
+  }
 }

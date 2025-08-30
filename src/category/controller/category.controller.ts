@@ -3,20 +3,19 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { CategoryService } from '../service/category.service';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import { CreateCategoryDto } from '../dto/create-category.dto';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('category')
 export class CategoryController {
-  constructor(
-    private readonly categoryService: CategoryService,
-  ) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -25,6 +24,14 @@ export class CategoryController {
     @Body() dto: CreateCategoryDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    return this.categoryService.create(dto, image)
+    return this.categoryService.create(dto, image);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all Categories' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
+    return this.categoryService.findAll({ limit, page });
   }
 }
