@@ -89,27 +89,13 @@ export class R2UploadService {
     }
   }
 
-  async uploadAdminImage(
+  // upload image method
+  async uploadImage(
     file: Express.Multer.File,
     adminId: number,
+    folderName: string,
   ): Promise<string> {
-    const key = this.generateKey('admin', adminId, file.originalname);
-    return this.uploadFile(file, key);
-  }
-
-  async uploadCustomerImage(
-    file: Express.Multer.File,
-    customerId: number,
-  ): Promise<string> {
-    const key = this.generateKey('customer', customerId, file.originalname);
-    return this.uploadFile(file, key);
-  }
-
-  async uploadSubjectImage(
-    file: Express.Multer.File,
-    subjectId: number,
-  ): Promise<string> {
-    const key = this.generateKey('subject', subjectId, file.originalname);
+    const key = this.generateKey(folderName, adminId, file.originalname);
     return this.uploadFile(file, key);
   }
 }

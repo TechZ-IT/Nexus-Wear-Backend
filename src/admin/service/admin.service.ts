@@ -49,9 +49,10 @@ export class AdminService {
     const savedAdmin = await this.adminRepository.save(admin);
 
     if (image) {
-      const imageUrl = await this.r2UploadService.uploadAdminImage(
+      const imageUrl = await this.r2UploadService.uploadImage(
         image,
         savedAdmin.id,
+        'admin'
       );
       if (!imageUrl) {
         throw new Error('Failed to upload image');
