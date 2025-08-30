@@ -105,6 +105,14 @@ export class R2UploadService {
     return this.uploadFile(file, key);
   }
 
+  async uploadCategoryImage(
+    file: Express.Multer.File,
+    categoryId: number,
+  ): Promise<string> {
+    const key = this.generateKey('category', categoryId, file.originalname);
+    return this.uploadFile(file, key);
+  }
+
   async uploadSubjectImage(
     file: Express.Multer.File,
     subjectId: number,
