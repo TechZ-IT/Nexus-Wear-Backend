@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -36,6 +37,12 @@ export class SubcategoryController {
     @Query('page') page = 1,
     @Query('categoryId') categoryId,
   ) {
-    return this.subcategoryService.findAll({limit, page,categoryId})
+    return this.subcategoryService.findAll({ limit, page, categoryId });
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get subcategory by ID' })
+  findOne(@Param('id') id: number) {
+    return this.subcategoryService.findOne(id);
   }
 }

@@ -8,6 +8,7 @@ import {
   Query,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AdminService } from '../service/admin.service';
@@ -19,6 +20,8 @@ import {
 import { CreateAdminDto } from '../dto/create-admin.dto';
 import { LoginAdminDto } from '../dto/login-admin.dto';
 import { AdminStatus } from 'src/common/types/status.enum';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { AdminGuard } from 'src/auth/guard/admin.guard';
 
 @Controller('admin')
 export class AdminController {
@@ -41,6 +44,7 @@ export class AdminController {
     return this.adminService.login(loginDto);
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: 'Get all admins' })
   @ApiQuery({ name: 'page', required: false, type: Number })
