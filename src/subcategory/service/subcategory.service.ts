@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
@@ -74,5 +75,20 @@ export class SubcategoryService {
     query.skip((page - 1) * limit).take(limit);
     const [data, total] = await query.getManyAndCount();
     return { data, limit, page, total };
+  }
+
+  async findOne(id: number): Promise<Subcategory> {
+    const subcategory = await this.subcategoryRepository
+      .createQueryBuilder('subcategory')
+      .where('subcategory.id = :id', { id })
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .getOne();
+
+    if (!subcategory) {
+      throw new NotFoundException(`Subcategory with ID ${id} is not found`);
+    }
+
+    // const [data, total] = await query.getManyAndCount();
+    return subcategory;
   }
 }
