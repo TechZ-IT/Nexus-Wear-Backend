@@ -43,9 +43,10 @@ export class CustomerService {
     const savedCustomer = await this.customerRepository.save(customer);
 
     if (imageFile) {
-      const imageUploadResult = await this.r2UploadService.uploadCustomerImage(
+      const imageUploadResult = await this.r2UploadService.uploadImage(
         imageFile,
         savedCustomer.id,
+        'customer',
       );
       if (!imageUploadResult) {
         throw new Error('Failed to upload image');
