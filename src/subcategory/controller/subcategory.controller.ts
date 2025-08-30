@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { SubcategoryService } from '../service/subcategory.service';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateSubcategoryDto } from '../dto/create-subcategory.dto';
 
@@ -22,5 +24,18 @@ export class SubcategoryController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.subcategoryService.create(dto, image);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all subcategory' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
+  findAll(
+    @Query('limit') limit = 10,
+    @Query('page') page = 1,
+    @Query('categoryId') categoryId,
+  ) {
+    return this.subcategoryService.findAll({limit, page,categoryId})
   }
 }
