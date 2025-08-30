@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '../entity/category.entity';
@@ -66,5 +67,19 @@ export class CategoryService {
     const [data, total] = await query.getManyAndCount();
 
     return { data, total, page, limit };
+  }
+
+  async findOne(id: number) {
+    const category = await this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category.id = :id', { id })
+      .leftJoinAndSelect('category.subcategory', 'subcategory')
+      .getOne();
+
+    if (!category) {
+      throw new NotFoundException('Category Not Found');
+    }
+
+    return category;
   }
 }
