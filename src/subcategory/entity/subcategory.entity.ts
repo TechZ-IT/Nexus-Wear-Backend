@@ -1,6 +1,6 @@
 import { Category } from 'src/category/entity/category.entity';
 import { BaseEntity } from 'src/common/entities/Base.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('subcategory')
 export class Subcategory extends BaseEntity {
@@ -10,7 +10,7 @@ export class Subcategory extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   image?: string;
 
   @Column({ name: 'category_id' })
@@ -20,5 +20,6 @@ export class Subcategory extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 }
