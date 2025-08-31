@@ -104,4 +104,15 @@ export class CustomerService {
       status: 'success',
     };
   }
+
+  async findOne(id: number) {
+    const customer = await this.customerRepository
+      .createQueryBuilder('customer')
+      .getOne();
+
+    if (!customer) {
+      throw new NotFoundException(`Customer with ID ${id} not found`);
+    }
+    return customer;
+  }
 }

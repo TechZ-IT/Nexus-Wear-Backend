@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -33,5 +34,10 @@ export class CategoryController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
     return this.categoryService.findAll({ limit, page });
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.categoryService.findOne(id);
   }
 }
