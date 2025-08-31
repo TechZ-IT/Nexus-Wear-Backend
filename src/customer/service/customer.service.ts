@@ -108,6 +108,7 @@ export class CustomerService {
   async findOne(id: number) {
     const customer = await this.customerRepository
       .createQueryBuilder('customer')
+      .where('customer.id = :id', { id })
       .getOne();
 
     if (!customer) {
