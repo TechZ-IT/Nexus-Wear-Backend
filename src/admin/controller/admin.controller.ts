@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -56,5 +58,17 @@ export class AdminController {
     @Query('status') status?: AdminStatus,
   ) {
     return this.adminService.findAll({ page, limit, status });
+  }
+  
+   @UseGuards(JwtAuthGuard, AdminGuard)
+  @Delete('soft/:id')
+  softRemove(@Param('id') id: number) {
+    return this.adminService.softRemove(id);
+  }
+
+   @UseGuards(JwtAuthGuard, AdminGuard)
+  @Delete(':id')
+  hardRemove(@Param('id') id: number) {
+    return this.adminService.hardRemove(id);
   }
 }
