@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -33,7 +34,7 @@ export class AdminController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
   @HttpCode(HttpStatus.CREATED)
-  Create(
+  create(
     @Body() createAdminDto: CreateAdminDto,
     @UploadedFiles() files: { image: Express.Multer.File },
   ) {
@@ -65,6 +66,18 @@ export class AdminController {
   @ApiOperation({ summary: 'Get admin by id' })
   findOne(@Param('id') id: number) {
     return this.adminService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
+  @HttpCode(HttpStatus.CREATED)
+  update(
+    @Param('id') id: number,
+    @Body() createAdminDto: CreateAdminDto,
+    @UploadedFiles() files: { image: Express.Multer.File },
+  ) {
+    return this.adminService.update(id, createAdminDto, files.image?.[0]);
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)
