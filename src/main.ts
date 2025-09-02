@@ -10,7 +10,15 @@ import {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  // app.enableCors(['https://nexus-wear-dashboard.vercel.app']);
+  app.enableCors({
+    origin: [
+      'https://nexus-wear-dashboard.vercel.app',
+      'http://localhost:3000',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
