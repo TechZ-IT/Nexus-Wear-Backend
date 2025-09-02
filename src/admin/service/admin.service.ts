@@ -13,6 +13,7 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { LoginAdminDto } from '../dto/login-admin.dto';
 import { RoleService } from 'src/role/service/role.service';
 import { AdminStatus } from 'src/common/types/status.enum';
+import { UpdateAdminDto } from '../dto/update-admin.dto';
 
 @Injectable()
 export class AdminService {
@@ -89,6 +90,7 @@ export class AdminService {
   async login(dto: LoginAdminDto) {
     const admin = await this.adminRepository.findOne({
       where: { email: dto.email },
+      relations: ['role'],
     });
 
     if (!admin) {
@@ -101,22 +103,13 @@ export class AdminService {
       throw new ForbiddenException('Invalid password');
     }
 
-    const adminInfo = await this.adminRepository.findOne({
-      where: { email: admin.email },
-      relations: ['role'],
-    });
-
-    if (!adminInfo) {
-      throw new NotFoundException('Admin not found');
-    }
-
     const token = this.authService.generateToken({
       id: admin.id,
       email: admin.email,
-      role: adminInfo.role.name,
+      role: admin.role.name,
     });
     return {
-      data: adminInfo,
+      data: admin,
       accessToken: token,
       message: 'Admin login successful!',
       status: 'success',
@@ -151,6 +144,24 @@ export class AdminService {
     return { data, limit, total, page };
   }
 
+  async findOne(id: number): Promise<Admin> {
+    const admin = await this.adminRepository
+      .createQueryBuilder('admin')
+      .where('admin.id =:id', { id })
+      .leftJoinAndSelect('admin.role', 'role')
+      .getOne();
+
+    if (!admin) {
+      throw new NotFoundException(`No admin found with ID:${id}`);
+    }
+
+    return admin;
+  }
+
+  async update(id: number, updateAdminDto: UpdateAdminDto) {
+    return;
+  }
+
   async hardRemove(id: number) {
     const result = await this.adminRepository.delete(id);
     if (result.affected === 0) {
@@ -160,11 +171,7 @@ export class AdminService {
   }
 
   async softRemove(id: number) {
-    const admin = await this.adminRepository.findOne({ where: { id } });
-    if (!admin) {
-      throw new NotFoundException(`No admin found with id:${id}`);
-    }
-
+    const admin = await this.findOne(id);
     admin.status = AdminStatus.DELETED;
     await this.adminRepository.save(admin);
     return { message: `Admin with ID:${id} has deleted`, status: 'success' };
