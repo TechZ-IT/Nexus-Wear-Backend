@@ -46,7 +46,7 @@ export class AdminController {
     return this.adminService.login(loginDto);
   }
 
-  // @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: 'Get all admins' })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -59,12 +59,14 @@ export class AdminController {
   ) {
     return this.adminService.findAll({ page, limit, status });
   }
-
+  
+   @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete('soft/:id')
   softRemove(@Param('id') id: number) {
     return this.adminService.softRemove(id);
   }
 
+   @UseGuards(JwtAuthGuard, AdminGuard)
   @Delete(':id')
   hardRemove(@Param('id') id: number) {
     return this.adminService.hardRemove(id);
