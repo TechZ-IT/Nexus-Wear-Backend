@@ -158,8 +158,41 @@ export class AdminService {
     return admin;
   }
 
-  async update(id: number, updateAdminDto: UpdateAdminDto) {
-    return;
+  async update(
+    id: number,
+    updateAdminDto: UpdateAdminDto,
+    image: Express.Multer.File,
+  ) {
+    const admin = await this.findOne(id);
+    const { image: img, ...adminData } = updateAdminDto;
+
+    Object.assign(admin, adminData);
+
+    if (image) {
+      const imageUrl = await this.r2UploadService.uploadImage(
+        image,
+        admin.id,
+        'admin',
+      );
+      if (!imageUrl) {
+        throw new Error('Failed to upload image');
+      }
+      admin.image = imageUrl;
+    }
+
+    await this.adminRepository.save(admin);
+
+    const token = this.authService.generateToken({
+      id: admin.id,
+      email: admin.email,
+      role: admin.role.name,
+    });
+    return {
+      data: admin,
+      message: 'Updated Admin Successfully',
+      status: 'success',
+      accessToken: token,
+    };
   }
 
   async hardRemove(id: number) {
