@@ -52,7 +52,7 @@ export class AdminService {
       const imageUrl = await this.r2UploadService.uploadImage(
         image,
         savedAdmin.id,
-        'admin'
+        'admin',
       );
       if (!imageUrl) {
         throw new Error('Failed to upload image');
@@ -149,5 +149,24 @@ export class AdminService {
     const [data, total] = await query.getManyAndCount();
 
     return { data, limit, total, page };
+  }
+
+  async hardRemove(id: number) {
+    const result = await this.adminRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Admin with ID ${id} not found`);
+    }
+    return { message: `Admin with ID:${id} has deleted`, status: 'success' };
+  }
+
+  async softRemove(id: number) {
+    const admin = await this.adminRepository.findOne({ where: { id } });
+    if (!admin) {
+      throw new NotFoundException(`No admin found with id:${id}`);
+    }
+
+    admin.status = AdminStatus.DELETED;
+    await this.adminRepository.save(admin);
+    return { message: `Admin with ID:${id} has deleted`, status: 'success' };
   }
 }

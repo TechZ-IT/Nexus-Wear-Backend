@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -44,7 +46,7 @@ export class AdminController {
     return this.adminService.login(loginDto);
   }
 
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  // @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: 'Get all admins' })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -56,5 +58,15 @@ export class AdminController {
     @Query('status') status?: AdminStatus,
   ) {
     return this.adminService.findAll({ page, limit, status });
+  }
+
+  @Delete('soft/:id')
+  softRemove(@Param('id') id: number) {
+    return this.adminService.softRemove(id);
+  }
+
+  @Delete(':id')
+  hardRemove(@Param('id') id: number) {
+    return this.adminService.hardRemove(id);
   }
 }
