@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -14,6 +15,7 @@ import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -49,5 +51,16 @@ export class CategoryController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.categoryService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: number,
+    @Body() body: UpdateCategoryDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.categoryService.update(id, body, image);
   }
 }
