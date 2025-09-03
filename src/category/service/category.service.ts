@@ -69,6 +69,19 @@ export class CategoryService {
     return { data, total, page, limit };
   }
 
+  // async findAllDefault(): Promise<{ data: Category[]; total: number }> {
+  //   const query = this.categoryRepository
+  //     .createQueryBuilder('category')
+  //     .leftJoinAndSelect('category.subcategory', 'subcategory')
+  //     .orderBy('category.id', 'DESC');
+
+  //   // query.skip((page - 1) * limit).take(limit);
+
+  //   const [data, total] = await query.getManyAndCount();
+
+  //   return { data, total };
+  // }
+
   async findOne(id: number) {
     const category = await this.categoryRepository
       .createQueryBuilder('category')
