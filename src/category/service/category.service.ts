@@ -9,6 +9,7 @@ import { Category } from '../entity/category.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -94,5 +95,29 @@ export class CategoryService {
     }
 
     return category;
+  }
+
+  async update(
+    id: number,
+    updateCategoryDto: UpdateCategoryDto,
+    image: Express.Multer.File,
+  ) {
+    const category = await this.findOne(id);
+
+    const { image: img, ...withoutImage } = updateCategoryDto;
+    Object.assign(category, withoutImage);
+
+    if (image) {
+      const imageUrl = await this.r2UploadService.uploadImage(
+        image,
+        id,
+        'category',
+      );
+      if (!imageUrl) {
+        throw new BadRequestException('category image upload failed');
+      }
+      category.image = imageUrl;
+    }
+    return this.categoryRepository.save(category);
   }
 }
