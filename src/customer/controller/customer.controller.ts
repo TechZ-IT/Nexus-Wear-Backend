@@ -45,8 +45,13 @@ export class CustomerController {
   @ApiOperation({ description: 'Get all Customer' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'page', required: false, type: Number })
-  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
-    return this.customerService.findAll({ page, limit });
+  @ApiQuery({ name: 'status', required: false, type: String })
+  findAll(
+    @Query('limit') limit = 10,
+    @Query('page') page = 1,
+    @Query('status') status,
+  ) {
+    return this.customerService.findAll({ page, limit, status });
   }
 
   @UseGuards(JwtAuthGuard)

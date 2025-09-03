@@ -108,9 +108,11 @@ export class CustomerService {
   async findAll({
     limit = 10,
     page = 1,
+    status,
   }: {
     limit: number;
     page: number;
+    status?: number;
   }): Promise<{
     data: Customer[];
     limit: number;
@@ -120,6 +122,11 @@ export class CustomerService {
     const query = this.customerRepository
       .createQueryBuilder('customer')
       .orderBy('customer.id', 'DESC');
+
+    if (status) {
+      console.log(status);
+      query.andWhere('customer.status  =:status', { status });
+    }
 
     // pagination
     query.skip((page - 1) * limit).take(limit);
