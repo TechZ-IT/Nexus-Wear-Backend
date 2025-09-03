@@ -10,10 +10,11 @@ import {
   Get,
   Param,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CustomerService } from '../service/customer.service';
 import { CreateCustomerDto } from '../dto/create-customer.dto';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { LoginCustomerDto } from '../dto/login-customer.dto';
@@ -38,6 +39,14 @@ export class CustomerController {
   @HttpCode(HttpStatus.CREATED)
   login(@Body() loginDto: LoginCustomerDto) {
     return this.customerService.login(loginDto);
+  }
+
+  @Get()
+  @ApiOperation({ description: 'Get all Customer' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
+    return this.customerService.findAll({ page, limit });
   }
 
   @UseGuards(JwtAuthGuard)
