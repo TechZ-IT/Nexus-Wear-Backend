@@ -9,6 +9,7 @@ import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 import { Subcategory } from '../entity/subcategory.entity';
 import { Repository } from 'typeorm';
 import { CreateSubcategoryDto } from '../dto/create-subcategory.dto';
+import { UpdateSubcategoryDto } from '../dto/update-subcategory.dto';
 
 @Injectable()
 export class SubcategoryService {
@@ -90,5 +91,30 @@ export class SubcategoryService {
 
     // const [data, total] = await query.getManyAndCount();
     return subcategory;
+  }
+
+  async update(
+    id: number,
+    updateSubcategoryDto: UpdateSubcategoryDto,
+    image: Express.Multer.File,
+  ) {
+    const subcategory = await this.findOne(id);
+
+    const { image: img, ...withoutImage } = updateSubcategoryDto;
+
+    Object.assign(subcategory, withoutImage);
+    if (image) {
+      const imageUrl = await this.r2UploadService.uploadImage(
+        image,
+        id,
+        'subcategory',
+      );
+      if (!imageUrl) {
+        throw new BadRequestException('Subcategory image upload failed');
+      }
+      subcategory.image = imageUrl;
+    }
+
+    return this.subcategoryRepository.save(subcategory);
   }
 }
