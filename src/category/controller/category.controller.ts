@@ -40,11 +40,11 @@ export class CategoryController {
     return this.categoryService.findAll({ limit, page });
   }
 
-  // @Get('all')
-  // @ApiOperation({ summary: 'Get all Categories without pagination' })
-  // findAllDefault() {
-  //   return this.categoryService.findAllDefault();
-  // }
+  @Get('all')
+  @ApiOperation({ summary: 'Get all Categories without pagination' })
+  findAllDefault() {
+    return this.categoryService.findAllDefault();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
