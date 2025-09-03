@@ -124,7 +124,6 @@ export class CustomerService {
       .orderBy('customer.id', 'DESC');
 
     if (status) {
-      console.log(status);
       query.andWhere('customer.status  =:status', { status });
     }
 
