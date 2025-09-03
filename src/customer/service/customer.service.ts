@@ -105,6 +105,28 @@ export class CustomerService {
     };
   }
 
+  async findAll({
+    limit = 10,
+    page = 1,
+  }: {
+    limit: number;
+    page: number;
+  }): Promise<{
+    data: Customer[];
+    limit: number;
+    page: number;
+    total: number;
+  }> {
+    const query = this.customerRepository
+      .createQueryBuilder('customer')
+      .orderBy('customer.id', 'DESC');
+
+    // pagination
+    query.skip((page - 1) * limit).take(limit);
+    const [data, total] = await query.getManyAndCount();
+    return { data, limit, page, total };
+  }
+
   async findOne(id: number) {
     const customer = await this.customerRepository
       .createQueryBuilder('customer')
