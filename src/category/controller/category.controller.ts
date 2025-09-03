@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   UploadedFile,
@@ -32,8 +33,17 @@ export class CategoryController {
   @ApiOperation({ summary: 'Get all Categories' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'page', required: false, type: Number })
-  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
+  findAll(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+  ) {
     return this.categoryService.findAll({ limit, page });
+  }
+
+  @Get('all')
+  @ApiOperation({ summary: 'Get all Categories without pagination' })
+  findAllDefault() {
+    return this.categoryService.findAllDefault();
   }
 
   @Get(':id')

@@ -11,6 +11,7 @@ import {
   Param,
   UseGuards,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CustomerService } from '../service/customer.service';
 import { CreateCustomerDto } from '../dto/create-customer.dto';
@@ -45,8 +46,13 @@ export class CustomerController {
   @ApiOperation({ description: 'Get all Customer' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'page', required: false, type: Number })
-  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
-    return this.customerService.findAll({ page, limit });
+  @ApiQuery({ name: 'status', required: false, type: String })
+  findAll(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('status') status,
+  ) {
+    return this.customerService.findAll({ page, limit, status });
   }
 
   @UseGuards(JwtAuthGuard)
