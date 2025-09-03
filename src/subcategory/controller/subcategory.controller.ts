@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -13,6 +14,7 @@ import { SubcategoryService } from '../service/subcategory.service';
 import { ApiConsumes, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateSubcategoryDto } from '../dto/create-subcategory.dto';
+import { UpdateSubcategoryDto } from '../dto/update-subcategory.dto';
 
 @Controller('subcategory')
 export class SubcategoryController {
@@ -45,5 +47,16 @@ export class SubcategoryController {
   @ApiOperation({ summary: 'Get subcategory by ID' })
   findOne(@Param('id') id: number) {
     return this.subcategoryService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: number,
+    @Body() body: UpdateSubcategoryDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.subcategoryService.update(id, body, image);
   }
 }
