@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   UploadedFile,
@@ -33,8 +34,8 @@ export class SubcategoryController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'categoryId', required: false, type: Number })
   findAll(
-    @Query('limit') limit = 10,
-    @Query('page') page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
     @Query('categoryId') categoryId,
   ) {
     return this.subcategoryService.findAll({ limit, page, categoryId });
