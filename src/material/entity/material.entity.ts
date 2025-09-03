@@ -1,5 +1,14 @@
 import { BaseEntity } from 'src/common/entities/Base.entity';
-import { Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity('material')
-export class Material extends BaseEntity {}
+export class Material extends BaseEntity {
+      @Column()
+      name: string;
+    
+      @Column({ nullable: true })
+      description?: string;
+    
+      @Column({ nullable: true })
+      image?: string;
+}
