@@ -1,19 +1,17 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/Base.entity';
-import {
-  Column,
-  Entity,
-} from 'typeorm';
+import { CustomerStatus } from 'src/common/types/status.enum';
+import { Column, Entity } from 'typeorm';
 
 @Entity('customer')
 export class Customer extends BaseEntity {
   @Column({ nullable: true })
   name?: string;
 
-  @Column({ nullable: true })
+  @Column()
   email?: string;
 
-  @Column({ nullable: true })
+  @Column()
   @Exclude()
   password?: string;
 
@@ -37,4 +35,7 @@ export class Customer extends BaseEntity {
 
   @Column({ nullable: true })
   country?: string;
+
+  @Column({ default: CustomerStatus.ACTIVE })
+  status: CustomerStatus;
 }

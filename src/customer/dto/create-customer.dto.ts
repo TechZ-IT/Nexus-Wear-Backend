@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { CustomerStatus } from 'src/common/types/status.enum';
 
 export class CreateCustomerDto {
   @ApiPropertyOptional({
@@ -81,4 +82,11 @@ export class CreateCustomerDto {
   @IsOptional()
   @IsString()
   country?: string;
+
+  @ApiPropertyOptional({
+    example: CustomerStatus,
+    description: 'customer status enum',
+    default: CustomerStatus.ACTIVE,
+  })
+  status?: CustomerStatus;
 }
