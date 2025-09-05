@@ -120,6 +120,12 @@ export class CategoryService {
       }
       category.image = imageUrl;
     }
-    return this.categoryRepository.save(category);
+    await this.categoryRepository.save(category);
+
+    return {
+      data: category,
+      message: 'Updated Category Successfully',
+      status: 'success',
+    };
   }
 }
