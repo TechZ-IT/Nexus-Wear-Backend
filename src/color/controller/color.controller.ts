@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseBoolPipe,
   ParseIntPipe,
   Post,
@@ -35,6 +36,12 @@ export class ColorController {
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
   ) {
-    return this.colorService.findAll({ page, limit});
+    return this.colorService.findAll({ page, limit });
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get Color by id' })
+  findOne(@Param('id') id: number) {
+    return this.colorService.findOne(id);
   }
 }
