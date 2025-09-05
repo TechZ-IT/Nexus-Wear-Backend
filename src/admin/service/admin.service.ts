@@ -117,8 +117,8 @@ export class AdminService {
   }
 
   async findAll({
-    limit = 10,
-    page = 1,
+    limit = 0,
+    page = 0,
     status,
   }: {
     limit: number;
@@ -137,7 +137,9 @@ export class AdminService {
     }
 
     //pagination
-    query.skip((page - 1) * limit).take(limit);
+    if (limit && page) {
+      query.skip((page - 1) * limit).take(limit);
+    }
 
     const [data, total] = await query.getManyAndCount();
 

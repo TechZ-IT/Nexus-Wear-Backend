@@ -36,16 +36,10 @@ export class CategoryController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'page', required: false, type: Number })
   findAll(
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
   ) {
     return this.categoryService.findAll({ limit, page });
-  }
-
-  @Get('all')
-  @ApiOperation({ summary: 'Get all Categories without pagination' })
-  findAllDefault() {
-    return this.categoryService.findAllDefault();
   }
 
   @Get(':id')

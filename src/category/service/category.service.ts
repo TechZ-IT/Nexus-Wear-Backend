@@ -52,8 +52,8 @@ export class CategoryService {
   }
 
   async findAll({
-    page = 1,
-    limit = 10,
+    page = 0,
+    limit = 0,
   }: {
     page: number;
     limit: number;
@@ -63,7 +63,9 @@ export class CategoryService {
       .leftJoinAndSelect('category.subcategory', 'subcategory')
       .orderBy('category.id', 'DESC');
 
-    query.skip((page - 1) * limit).take(limit);
+    if (limit && page) {
+      query.skip((page - 1) * limit).take(limit);
+    }
 
     const [data, total] = await query.getManyAndCount();
 
