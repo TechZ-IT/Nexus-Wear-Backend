@@ -37,4 +37,25 @@ export class ColorService {
       status: 'success',
     };
   }
+
+  async findAll({
+    limit = 0,
+    page = 0,
+  }: {
+    limit?: number;
+    page?: number;
+  }): Promise<{ data: Color[]; page: number; limit: number; total: number }> {
+    const query = this.colorRepository
+      .createQueryBuilder('color')
+      .orderBy('color.id', 'DESC');
+
+    if (limit && page) {
+      console.log('hello');
+      query.skip((page - 1) * limit).take(limit);
+    }
+
+    const [data, total] = await query.getManyAndCount();
+
+    return { data, page, limit, total };
+  }
 }
