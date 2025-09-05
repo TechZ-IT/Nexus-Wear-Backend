@@ -4,6 +4,7 @@ import { Color } from '../entity/color.entity';
 import { Repository } from 'typeorm';
 import { CreateColorDto } from '../dto/create-color.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
+import { UpdateColorDto } from '../dto/update-color.dto';
 
 @Injectable()
 export class ColorService {
@@ -69,5 +70,34 @@ export class ColorService {
       throw new NotFoundException(`Color with ID:${id} not found`);
     }
     return color;
+  }
+
+  async update(
+    id: number,
+    updateColorDto: UpdateColorDto,
+    image: Express.Multer.File,
+  ) {
+    const color = await this.findOne(id);
+    const { image: img, ...withoutImage } = updateColorDto;
+
+    Object.assign(color, withoutImage);
+    if (image) {
+      const imageUrl = await this.r2UploadService.uploadImage(
+        image,
+        id,
+        'color',
+      );
+      if (!imageUrl) {
+        throw new Error('Color image upload failed');
+      }
+      color.image = imageUrl;
+    }
+    await this.colorRepository.save(color);
+
+    return {
+      data: color,
+      message: 'Updated Color Successfully!',
+      status: 'success',
+    };
   }
 }
