@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Color } from '../entity/color.entity';
 import { Repository } from 'typeorm';
@@ -57,5 +57,17 @@ export class ColorService {
     const [data, total] = await query.getManyAndCount();
 
     return { data, page, limit, total };
+  }
+
+  async findOne(id: number) {
+    const color = await this.colorRepository
+      .createQueryBuilder('color')
+      .where('color.id = :id', { id })
+      .getOne();
+
+    if (!color) {
+      throw new NotFoundException(`Color with ID:${id} not found`);
+    }
+    return color;
   }
 }
