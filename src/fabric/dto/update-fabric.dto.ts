@@ -1,18 +1,18 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateColorDto {
+export class UpdateFabricDto {
   @ApiPropertyOptional({
     example: 'Red',
-    description: 'color name should be here',
+    description: 'fabric name should be here',
   })
   @IsOptional()
   @IsString()
   name: string;
 
   @ApiPropertyOptional({
-    example: 'here is the red color',
-    description: 'color description should be here',
+    example: 'here is the red fabric',
+    description: 'fabric description should be here',
   })
   @IsOptional()
   @IsString()
