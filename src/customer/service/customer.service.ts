@@ -106,8 +106,8 @@ export class CustomerService {
   }
 
   async findAll({
-    limit = 10,
-    page = 1,
+    limit = 0,
+    page = 0,
     status,
   }: {
     limit: number;
@@ -128,7 +128,9 @@ export class CustomerService {
     }
 
     // pagination
-    query.skip((page - 1) * limit).take(limit);
+    if (page && limit) {
+      query.skip((page - 1) * limit).take(limit);
+    }
     const [data, total] = await query.getManyAndCount();
     return { data, limit, page, total };
   }

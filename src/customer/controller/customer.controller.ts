@@ -48,8 +48,8 @@ export class CustomerController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'status', required: false, type: String })
   findAll(
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
     @Query('status') status,
   ) {
     return this.customerService.findAll({ page, limit, status });

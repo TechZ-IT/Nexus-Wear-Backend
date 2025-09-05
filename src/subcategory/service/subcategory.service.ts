@@ -51,8 +51,8 @@ export class SubcategoryService {
   }
 
   async findAll({
-    limit = 10,
-    page = 1,
+    limit = 0,
+    page = 0,
     categoryId,
   }: {
     limit: number;
@@ -72,8 +72,11 @@ export class SubcategoryService {
     if (categoryId) {
       query.andWhere('subcategory.categoryId = :categoryId', { categoryId });
     }
+    //pagination
+    if (limit && page) {
+      query.skip((page - 1) * limit).take(limit);
+    }
 
-    query.skip((page - 1) * limit).take(limit);
     const [data, total] = await query.getManyAndCount();
     return { data, limit, page, total };
   }
