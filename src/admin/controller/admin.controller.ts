@@ -31,6 +31,7 @@ import { AdminGuard } from 'src/auth/guard/admin.guard';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
@@ -48,7 +49,7 @@ export class AdminController {
     return this.adminService.login(loginDto);
   }
 
-  // @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: 'Get all admins' })
   @ApiQuery({ name: 'page', required: false, type: Number })
@@ -69,6 +70,7 @@ export class AdminController {
     return this.adminService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Patch(':id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
