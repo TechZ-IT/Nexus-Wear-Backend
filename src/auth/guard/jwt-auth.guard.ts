@@ -50,23 +50,23 @@ export class JwtAuthGuard implements CanActivate {
         });
 
         if (role) {
-          // Enhance the user object with the role and permissions
+          // Enhance the user object with the role info
           request.user = {
-            sub: decoded.sub,
+            id: decoded.id,
             email: decoded.email,
             roleId: decoded.roleId,
             role: role.name,
           };
         } else {
           request.user = {
-            sub: decoded.sub,
+            id: decoded.id,
             email: decoded.email,
             role: decoded.role,
           };
         }
       } else {
         request.user = {
-          sub: decoded.sub,
+          id: decoded.id,
           email: decoded.email,
           role: decoded.role,
         };
