@@ -3,12 +3,12 @@ import { Column, Entity } from 'typeorm';
 
 @Entity('material')
 export class Material extends BaseEntity {
-      @Column()
-      name: string;
-    
-      @Column({ nullable: true })
-      description?: string;
-    
-      @Column({ nullable: true })
-      image?: string;
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
+  description?: string;
+
+  @Column({ nullable: true })
+  image?: string;
 }
