@@ -49,7 +49,7 @@ export class AdminController {
     return this.adminService.login(loginDto);
   }
 
-  // @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: 'Get all admins' })
   @ApiQuery({ name: 'page', required: false, type: Number })
