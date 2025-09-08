@@ -128,4 +128,16 @@ export class CategoryService {
       status: 'success',
     };
   }
+
+  async delete(id: number) {
+    const result = await this.categoryRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`No Category found with ID${id}`);
+    }
+    return {
+      message: `Category with ID: ${id} has deleted`,
+      status: 'success',
+    };
+  }
+  
 }
