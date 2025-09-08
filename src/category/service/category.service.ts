@@ -129,7 +129,7 @@ export class CategoryService {
     };
   }
 
-  async delete(id: number) {
+  async remove(id: number) {
     const result = await this.categoryRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`No Category found with ID${id}`);
@@ -139,5 +139,4 @@ export class CategoryService {
       status: 'success',
     };
   }
-  
 }
