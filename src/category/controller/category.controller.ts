@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -56,5 +57,10 @@ export class CategoryController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.categoryService.update(id, body, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.categoryService.remove(id);
   }
 }
