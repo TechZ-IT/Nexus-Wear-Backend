@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseBoolPipe,
@@ -58,5 +59,10 @@ export class ColorController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.colorService.update(id, updateColorDto, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.colorService.remove(id);
   }
 }

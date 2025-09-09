@@ -100,4 +100,11 @@ export class FabricService {
       status: 'success',
     };
   }
+
+  async remove(id: number) {
+    const result = await this.fabricRepository.delete(id);
+    if (result.affected === 0)
+      throw new NotFoundException(`No fabric found with ID:${id}`);
+    return { message: `Fabric deleted with ID:${id}`, status: 'success' };
+  }
 }
