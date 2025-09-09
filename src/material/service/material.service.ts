@@ -109,4 +109,11 @@ export class MaterialService {
       status: 'success',
     };
   }
+
+  async remove(id: number) {
+    const result = await this.MaterialRepository.delete(id);
+    if (result.affected === 0)
+      throw new NotFoundException(`Material not found with Id:${id}`);
+    return { message: `Material deleted with ID:${id}`, status: 'status' };
+  }
 }
