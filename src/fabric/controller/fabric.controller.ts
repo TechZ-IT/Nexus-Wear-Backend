@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseBoolPipe,
@@ -57,5 +58,10 @@ export class FabricController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.fabricService.update(id, updateFabricDto, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.fabricService.remove(id);
   }
 }
