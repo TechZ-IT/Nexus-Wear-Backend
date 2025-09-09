@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -58,5 +59,10 @@ export class SubcategoryController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.subcategoryService.update(id, body, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.remove(id);
   }
 }
