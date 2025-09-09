@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseBoolPipe,
@@ -58,5 +59,10 @@ export class SizeController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.sizeService.update(id, updateSizeDto, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.sizeService.remove(id);
   }
 }
