@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseBoolPipe,
@@ -58,5 +59,10 @@ export class MaterialController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return this.materialService.update(id, updateMaterialDto, image);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.materialService.remove(id);
   }
 }
