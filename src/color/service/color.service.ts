@@ -100,4 +100,12 @@ export class ColorService {
       status: 'success',
     };
   }
+
+  async remove(id: number) {
+    const result = await this.colorRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`No color found with ID:${id}`);
+    }
+    return { message: `Color deleted with ID:${id}`, status: 'success' };
+  }
 }
