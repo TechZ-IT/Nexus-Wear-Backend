@@ -120,4 +120,12 @@ export class SubcategoryService {
 
     return this.subcategoryRepository.save(subcategory);
   }
+
+  async remove(id: number) {
+    const result = await this.subcategoryRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Subcategory not found with ID:${id} `);
+    }
+    return { message: `Subcategory deleted with ID:${id}`, status: 'success' };
+  }
 }
