@@ -100,4 +100,11 @@ export class SizeService {
       status: 'success',
     };
   }
+
+  async remove(id: number) {
+    const result = await this.sizeRepository.delete(id);
+    if (result.affected === 0)
+      throw new NotFoundException(`Size not found with ID${id}`);
+    return { message: `Size deleted with ID:${id}`, status: 'success' };
+  }
 }
