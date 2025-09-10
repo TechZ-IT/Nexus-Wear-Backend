@@ -116,7 +116,7 @@ export class CategoryService {
         'category',
       );
       if (!imageUrl) {
-        throw new BadRequestException('category image upload failed');
+        throw new BadRequestException('Category image upload failed');
       }
       category.image = imageUrl;
     }
