@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UploadedFile,
@@ -32,5 +33,11 @@ export class BannerController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   findAll(@Query('page') page: number, @Query('limit') limit: number) {
     return this.bannerService.findAll({ page, limit });
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'find banner by id' })
+  findOne(@Param('id') id: number) {
+    return this.bannerService.findOne(id);
   }
 }
