@@ -9,9 +9,12 @@ export class Banner extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ name: 'button_text' })
   buttonText: string;
 
-  @Column()
-  image: string;
+  @Column({ name: 'button_redirect_url' })
+  buttonRedirectUrl: string;
+
+  @Column({ nullable: true })
+  image?: string;
 }

@@ -1,4 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Banner } from '../entity/banner.entity';
+import { Repository } from 'typeorm';
+import { CreateBannerDto } from '../dto/create-banner.dto';
+import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
 
 @Injectable()
-export class BannerService {}
+export class BannerService {
+  constructor(
+    @InjectRepository(Banner)
+    private readonly bannerRepository: Repository<Banner>,
+
+    private readonly r2UploadService: R2UploadService,
+  ) {}
+
+  async create(createBannerDto: CreateBannerDto, image?: Express.Multer.File) {
+    const { image: img, ...withoutImage } = createBannerDto;
+    const banner = this.bannerRepository.create(withoutImage);
+    const savedBanner = await this.bannerRepository.save(banner);
+
+    if (image) {
+      const imageUrl = await this.r2UploadService.uploadImage(
+        image,
+        savedBanner.id,
+        'banner',
+      );
+      if (!imageUrl) throw new BadRequestException('Image upload failed');
+      savedBanner.image = imageUrl;
+    }
+    await this.bannerRepository.save(savedBanner);
+    return {
+      data: savedBanner,
+      message: 'Created Banner Successfully',
+      status: 'success',
+    };
+  }
+}
