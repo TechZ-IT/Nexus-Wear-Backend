@@ -57,7 +57,12 @@ export class CategoryService {
   }: {
     page: number;
     limit: number;
-  }): Promise<{ data: Category[]; page; total; limit }> {
+  }): Promise<{
+    data: Category[];
+    page: number;
+    total: number;
+    limit: number;
+  }> {
     const query = this.categoryRepository
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.subcategory', 'subcategory')
@@ -116,7 +121,7 @@ export class CategoryService {
         'category',
       );
       if (!imageUrl) {
-        throw new BadRequestException('category image upload failed');
+        throw new BadRequestException('Category image upload failed');
       }
       category.image = imageUrl;
     }

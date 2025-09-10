@@ -35,4 +35,22 @@ export class BannerService {
       status: 'success',
     };
   }
+
+  async findAll({
+    page = 0,
+    limit = 0,
+  }: {
+    page: number;
+    limit: number;
+  }): Promise<{ data: Banner[]; page: number; limit: number; total: number }> {
+    const query = this.bannerRepository
+      .createQueryBuilder('banner')
+      .orderBy('banner.id', 'DESC');
+
+    if (page && limit) {
+      query.skip((page - 1) * limit).take(limit);
+    }
+    const [data, total] = await query.getManyAndCount();
+    return { data, page, limit, total };
+  }
 }
