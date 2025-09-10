@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Banner } from '../entity/banner.entity';
 import { Repository } from 'typeorm';
@@ -52,5 +56,13 @@ export class BannerService {
     }
     const [data, total] = await query.getManyAndCount();
     return { data, page, limit, total };
+  }
+
+  async findOne(id: number) {
+    const banner = await this.bannerRepository.findOne({ where: { id } });
+    if (!banner) {
+      throw new NotFoundException(`No banner found with ID:${id}`);
+    }
+    return banner;
   }
 }
