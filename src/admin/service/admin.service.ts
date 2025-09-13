@@ -76,7 +76,6 @@ export class AdminService {
       role: adminInfo.role.name,
     });
 
-    console.log(savedAdmin.role);
 
     return {
       data: adminInfo,
@@ -172,7 +171,6 @@ export class AdminService {
 
     if (password) {
       admin.password = await bcrypt.hash(password, 10);
-      console.log('password updated', password, admin.password);
     }
 
     if (image) {
