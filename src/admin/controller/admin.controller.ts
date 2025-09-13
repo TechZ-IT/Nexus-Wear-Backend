@@ -26,6 +26,7 @@ import { LoginAdminDto } from '../dto/login-admin.dto';
 import { AdminStatus } from 'src/common/types/status.enum';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guard/admin.guard';
+import { UpdateAdminDto } from '../dto/update-admin.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -77,10 +78,10 @@ export class AdminController {
   @HttpCode(HttpStatus.CREATED)
   update(
     @Param('id') id: number,
-    @Body() createAdminDto: CreateAdminDto,
+    @Body() updateAdminDto: UpdateAdminDto,
     @UploadedFiles() files: { image: Express.Multer.File },
   ) {
-    return this.adminService.update(id, createAdminDto, files.image?.[0]);
+    return this.adminService.update(id, updateAdminDto, files.image?.[0]);
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)

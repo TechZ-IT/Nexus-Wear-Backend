@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { AdminStatus } from 'src/common/types/status.enum';
 
 export class UpdateAdminDto {
@@ -20,6 +26,14 @@ export class UpdateAdminDto {
   image?: Express.Multer.File;
 
   @ApiPropertyOptional({
+    example: 'admin@gmail.com',
+    description: 'Admin email should be here',
+  })
+  @IsOptional()
+  @IsEmail()
+  email: string;
+
+  @ApiPropertyOptional({
     example: '123456',
     description: 'Admin password should be here',
   })
@@ -35,24 +49,27 @@ export class UpdateAdminDto {
   @IsString()
   phone: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Saver, Dhaka, Bangladesh',
     description: 'Admin address line should be here',
   })
+  @IsOptional()
   @IsString()
   addressLine: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '3399 2884 44499',
     description: 'Admin national id number should be here',
   })
+  @IsOptional()
   @IsString()
   nationalId: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     default: AdminStatus.PENDING,
     description: 'Admin national id number should be here',
   })
+  @IsOptional()
   @IsEnum(AdminStatus)
   status: AdminStatus;
 
