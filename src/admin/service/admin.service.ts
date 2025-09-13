@@ -30,7 +30,6 @@ export class AdminService {
     const existingAdmin = await this.adminRepository.findOne({
       where: { email: createAdminDto.email },
     });
-    // console.log(existingAdmin);
     if (existingAdmin) {
       throw new ForbiddenException('Admin with this email already exists');
     }
