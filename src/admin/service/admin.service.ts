@@ -164,7 +164,8 @@ export class AdminService {
     updateAdminDto: UpdateAdminDto,
     image: Express.Multer.File,
   ) {
-    const admin = await this.findOne(id);
+    const { role, ...admin } = await this.findOne(id);
+
     const { image: img, password, ...adminData } = updateAdminDto;
 
     Object.assign(admin, adminData);
@@ -187,13 +188,15 @@ export class AdminService {
 
     await this.adminRepository.save(admin);
 
+    
+
     const token = this.authService.generateToken({
       id: admin.id,
       email: admin.email,
-      role: admin.role.name,
+      role: role.name,
     });
     return {
-      data: admin,
+      data: {admin},
       message: 'Updated Admin Successfully',
       status: 'success',
       accessToken: token,
