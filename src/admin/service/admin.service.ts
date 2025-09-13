@@ -171,7 +171,8 @@ export class AdminService {
     Object.assign(admin, adminData);
 
     if (password) {
-      admin.password = await bcrypt.hash(admin.password, 10);
+      admin.password = await bcrypt.hash(password, 10);
+      console.log('password updated', password, admin.password);
     }
 
     if (image) {
@@ -188,15 +189,13 @@ export class AdminService {
 
     await this.adminRepository.save(admin);
 
-    
-
     const token = this.authService.generateToken({
       id: admin.id,
       email: admin.email,
       role: role.name,
     });
     return {
-      data: {admin},
+      data: admin,
       message: 'Updated Admin Successfully',
       status: 'success',
       accessToken: token,
