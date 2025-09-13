@@ -189,13 +189,15 @@ export class AdminService {
 
     await this.adminRepository.save(admin);
 
+    const savedAdmin = await this.findOne(id);
+
     const token = this.authService.generateToken({
       id: admin.id,
       email: admin.email,
       role: role.name,
     });
     return {
-      data: admin,
+      data: savedAdmin,
       message: 'Updated Admin Successfully',
       status: 'success',
       accessToken: token,
