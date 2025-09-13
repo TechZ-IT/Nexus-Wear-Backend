@@ -166,9 +166,13 @@ export class AdminService {
     image: Express.Multer.File,
   ) {
     const admin = await this.findOne(id);
-    const { image: img, ...adminData } = updateAdminDto;
+    const { image: img, password, ...adminData } = updateAdminDto;
 
     Object.assign(admin, adminData);
+
+    if (password) {
+      admin.password = await bcrypt.hash(admin.password, 10);
+    }
 
     if (image) {
       const imageUrl = await this.r2UploadService.uploadImage(

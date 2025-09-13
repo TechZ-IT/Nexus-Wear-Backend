@@ -8,6 +8,7 @@ import { Banner } from '../entity/banner.entity';
 import { Repository } from 'typeorm';
 import { CreateBannerDto } from '../dto/create-banner.dto';
 import { R2UploadService } from 'src/r2-upload/service/r2-upload.service';
+import { UpdateBannerDto } from '../dto/update-banner.dto';
 
 @Injectable()
 export class BannerService {
@@ -64,5 +65,13 @@ export class BannerService {
       throw new NotFoundException(`No banner found with ID:${id}`);
     }
     return banner;
+  }
+
+  async update(
+    id: number,
+    updateBannerDto: UpdateBannerDto,
+    image: Express.Multer.File,
+  ) {
+    const banner = await this.findOne(id);
   }
 }

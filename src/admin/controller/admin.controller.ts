@@ -70,7 +70,7 @@ export class AdminController {
     return this.adminService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  // @UseGuards(JwtAuthGuard, AdminGuard)
   @Patch(':id')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }]))
