@@ -56,12 +56,14 @@ export class AdminController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'status', required: false, type: String })
+  @ApiQuery({ name: 'search', required: false, type: String ,description: 'Search by name or email'})
   findAll(
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
     @Query('status') status?: AdminStatus,
+    @Query('search') search?: string,
   ) {
-    return this.adminService.findAll({ page, limit, status });
+    return this.adminService.findAll({ page, limit, status ,search});
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)

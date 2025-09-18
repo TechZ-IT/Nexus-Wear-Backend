@@ -76,7 +76,6 @@ export class AdminService {
       role: adminInfo.role.name,
     });
 
-
     return {
       data: adminInfo,
       accessToken: token,
@@ -118,10 +117,12 @@ export class AdminService {
     limit = 0,
     page = 0,
     status,
+    search,
   }: {
     limit: number;
     page: number;
     status?: AdminStatus;
+    search?: string;
   }): Promise<{ data: Admin[]; total: number; page: number; limit: number }> {
     const query = this.adminRepository
       .createQueryBuilder('admin')
@@ -132,6 +133,14 @@ export class AdminService {
       query.andWhere('admin.status LIKE status', {
         status,
       });
+    }
+
+    if (search && search.trim()) {
+      const searchTerm = `%${search.trim().toLowerCase()}%`;
+      query.where(
+        '(LOWER(admin.name) LIKE :search OR LOWER(admin.email) LIKE :search)',
+        { search: searchTerm },
+      );
     }
 
     //pagination
