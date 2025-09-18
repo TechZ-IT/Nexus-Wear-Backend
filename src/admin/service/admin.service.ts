@@ -130,7 +130,7 @@ export class AdminService {
       .orderBy('admin.id', 'DESC');
 
     if (status) {
-      query.andWhere('admin.status LIKE status', {
+      query.andWhere('admin.status LIKE :status', {
         status,
       });
     }
