@@ -101,7 +101,13 @@ export class SubcategoryService {
     updateSubcategoryDto: UpdateSubcategoryDto,
     image: Express.Multer.File,
   ) {
-    const subcategory = await this.findOne(id);
+    const subcategory = await this.subcategoryRepository.findOne({
+      where: { id },
+    });
+
+    if (!subcategory) {
+      throw new NotFoundException(`Subcategory with id ${id} not found`);
+    }
 
     const { image: img, ...withoutImage } = updateSubcategoryDto;
 
@@ -117,7 +123,7 @@ export class SubcategoryService {
       }
       subcategory.image = imageUrl;
     }
-
+    // console.log(subcategory);
     return this.subcategoryRepository.save(subcategory);
   }
 
