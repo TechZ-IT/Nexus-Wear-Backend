@@ -29,6 +29,7 @@ import { StatisticsModule } from './statistics/module/statistics.module';
 import { AddressBookModule } from './address-book/module/address-book.module';
 import { NotificationModule } from './notification/module/notification.module';
 import { ProductModule } from './product/module/product.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 dotenv.config();
 @Module({
@@ -42,6 +43,7 @@ dotenv.config();
       database: process.env.DB_NAME,
       autoLoadEntities: true,
       synchronize: true,
+       namingStrategy: new SnakeNamingStrategy(),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
