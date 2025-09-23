@@ -13,10 +13,11 @@ export enum AdminStatus {
 }
 
 export enum ProductStatus {
-  DRAFT = 'draft',
   PUBLISHED = 'published',
   OUT_OF_STOCK = 'out_of_stock',
+  IN_STOCK = 'in_stock',
   DISCONTINUED = 'discontinued',
+  UP_COMING = 'up_coming',
 }
 
 export enum OrderStatus {

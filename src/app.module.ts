@@ -28,6 +28,7 @@ import { SubscriberModule } from './subscriber/module/subscriber.module';
 import { StatisticsModule } from './statistics/module/statistics.module';
 import { AddressBookModule } from './address-book/module/address-book.module';
 import { NotificationModule } from './notification/module/notification.module';
+import { ProductModule } from './product/module/product.module';
 
 dotenv.config();
 @Module({
@@ -69,6 +70,7 @@ dotenv.config();
     StatisticsModule,
     NotificationModule,
     AddressBookModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
