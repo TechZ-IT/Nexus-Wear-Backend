@@ -11,10 +11,8 @@ import { AuthModule } from './auth/module/auth.module';
 import { AdminModule } from './admin/module/admin.module';
 import { CategoryModule } from './category/module/category.module';
 import { SubcategoryModule } from './subcategory/module/subcategory.module';
-import { FabricModule } from './fabric/module/fabric.module';
 import { ColorModule } from './color/module/color.module';
 import { SizeModule } from './size/module/size.module';
-import { MaterialModule } from './material/module/material.module';
 import { OrderModule } from './order/module/order.module';
 import { PaymentModule } from './payment/module/payment.module';
 import { AddressModule } from './address/module/address.module';
@@ -55,10 +53,8 @@ dotenv.config();
     AdminModule,
     CategoryModule,
     SubcategoryModule,
-    FabricModule,
     ColorModule,
     SizeModule,
-    MaterialModule,
     OrderModule,
     PaymentModule,
     AddressModule,
