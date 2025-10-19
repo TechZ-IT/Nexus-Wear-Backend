@@ -4,26 +4,26 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
   ClassSerializerInterceptor,
   ValidationPipe,
-  VersioningType,
 } from '@nestjs/common';
+import type { Request, Response } from 'express';
+
+let cachedApp: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // app.enableCors(['https://nexus-wear-dashboard.vercel.app']);
   app.enableCors({
     origin: [
       'https://nexus-wear-dashboard.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:3002',
-      'https://nexus-wear-tawny.vercel.app'
+      'https://nexus-wear-tawny.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  // app.enableVersioning({ type: VersioningType.URI });
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.useGlobalPipes(
@@ -38,20 +38,29 @@ async function bootstrap() {
     .setTitle('Nexus Wear Backend')
     .setDescription('The Nexus Wear API description')
     .setVersion('1.0')
-    .addTag('nexus-wear')
-    .addBearerAuth({
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-      name: 'Authorization',
-      description: 'Enter JWT token',
-      in: 'header',
-    })
+    .addBearerAuth()
     .build();
 
-  const DocumentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, DocumentFactory);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  if (process.env.VERCEL) {
+    await app.init(); // no listen
+    return app.getHttpAdapter().getInstance();
+  } else {
+    const port = process.env.PORT || 3000;
+    await app.listen(port);
+    console.log(`🚀 Server running at http://localhost:${port}`);
+  }
 }
-bootstrap();
+
+// Only export handler when running on Vercel
+if (process.env.VERCEL) {
+  const handler = async (req: Request, res: Response) => {
+    if (!cachedApp) cachedApp = await bootstrap();
+    return cachedApp(req, res);
+  };
+  module.exports = handler;
+} else {
+  bootstrap();
+}
