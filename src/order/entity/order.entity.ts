@@ -18,19 +18,17 @@ export enum OrderStatus {
   RETURNED = 'returned',
   DELIVERED = 'delivered',
   REFUNDED = 'refunded',
-  INTRANSIT = 'in_transit',
 }
 export enum PaymentType {
   COD = 'COD',
-  BKASH = 'BKASH',
-  NAGAD = 'NAGAD',
   SSL = 'SSL',
+  STRIPE = 'STRIPE',
+  PAYPAL = 'PAYPAL',
 }
 
 export interface OrderProduct {
   // Product info
   productId: number;
-  productImage: string;
   productCode?: string;
 
   // Selected attributes
@@ -41,10 +39,6 @@ export interface OrderProduct {
   unitPrice: number;
   quantity: number;
   totalPrice: number;
-
-  // Enriched fields
-  size?: any;
-  color?: any;
 }
 
 @Entity('order')
