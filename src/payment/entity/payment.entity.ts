@@ -1,5 +1,42 @@
 import { BaseEntity } from 'src/common/entities/Base.entity';
-import { Entity } from 'typeorm';
+import { PaymentStatus, PaymentType } from 'src/common/types/status.enum';
+import { Customer } from 'src/customer/entity/customer.entity';
+import { Order } from 'src/order/entity/order.entity';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('payment')
-export class Payment extends BaseEntity {}
+export class Payment extends BaseEntity {
+  @Column({ unique: true })
+  transactionId: string;
+
+  @Column({
+    type: 'enum',
+    enum: PaymentType,
+    default: PaymentType.COD,
+  })
+  paymentType: PaymentType;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  amount: number;
+
+  @Column({
+    type: 'enum',
+    enum: PaymentStatus,
+    default: PaymentStatus.PENDING,
+  })
+  status: PaymentStatus;
+
+  @Column({ nullable: true })
+  orderId: number;
+
+  @Column({ nullable: true })
+  customerId: number;
+
+  @ManyToOne(() => Order, { onDelete: 'CASCADE', nullable: true })
+  @JoinColumn({ name: 'orderId' })
+  order: Order;
+
+  @ManyToOne(() => Customer, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn({ name: 'customerId' })
+  customer: Customer;
+}
