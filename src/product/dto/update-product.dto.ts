@@ -18,6 +18,15 @@ export class UpdateProductDto {
   name?: string;
 
   @ApiPropertyOptional({
+    example: '["",""]',
+    description: 'Name of the product',
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  images: string[];
+
+  @ApiPropertyOptional({
     example: 'PROD124',
     description: 'Unique product code',
   })

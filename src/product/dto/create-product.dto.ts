@@ -16,6 +16,15 @@ export class CreateProductDto {
   name: string;
 
   @ApiProperty({
+    example: '["",""]',
+    description: 'Name of the product',
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  images: string[];
+
+  @ApiProperty({
     example: 'PROD123',
     description: 'Unique product code',
     required: false,

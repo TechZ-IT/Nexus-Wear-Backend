@@ -21,6 +21,9 @@ export class Product extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true ,type:'json'})
+  images?: string[];
+
   @Column()
   productCode?: string;
 
