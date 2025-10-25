@@ -1,7 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/Base.entity';
 import { CustomerStatus } from 'src/common/types/status.enum';
-import { Column, Entity } from 'typeorm';
+import { Order } from 'src/order/entity/order.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('customer')
 export class Customer extends BaseEntity {
@@ -38,4 +39,7 @@ export class Customer extends BaseEntity {
 
   @Column({ default: CustomerStatus.ACTIVE })
   status: CustomerStatus;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
 }

@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/Base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { SubDistrict } from './subdistrict';
+import { SubDistrict } from './subdistrict.entity';
 
 @Entity('district')
 export class District extends BaseEntity {

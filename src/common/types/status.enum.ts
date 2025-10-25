@@ -22,11 +22,24 @@ export enum ProductStatus {
 
 export enum OrderStatus {
   PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  SHIPPED = 'shipped',
-  DELIVERED = 'delivered',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
   CANCELLED = 'cancelled',
   RETURNED = 'returned',
+  DELIVERED = 'delivered',
+  REFUNDED = 'refunded',
+}
+export enum PaymentType {
+  COD = 'COD',
+  SSL = 'SSL',
+  STRIPE = 'STRIPE',
+  PAYPAL = 'PAYPAL',
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  FAILED = 'failed',
   REFUNDED = 'refunded',
 }
 
