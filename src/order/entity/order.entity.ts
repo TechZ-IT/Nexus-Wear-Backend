@@ -1,4 +1,5 @@
 // src/order/entity/order.entity.ts
+import { OrderStatus, PaymentType } from 'src/common/types/status.enum';
 import { Customer } from 'src/customer/entity/customer.entity';
 import {
   Entity,
@@ -9,22 +10,6 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-
-export enum OrderStatus {
-  PENDING = 'pending',
-  PROCESSING = 'processing',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
-  RETURNED = 'returned',
-  DELIVERED = 'delivered',
-  REFUNDED = 'refunded',
-}
-export enum PaymentType {
-  COD = 'COD',
-  SSL = 'SSL',
-  STRIPE = 'STRIPE',
-  PAYPAL = 'PAYPAL',
-}
 
 export interface OrderProduct {
   // Product info
