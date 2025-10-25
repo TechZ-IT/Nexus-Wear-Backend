@@ -32,8 +32,8 @@ export interface OrderProduct {
   productCode?: string;
 
   // Selected attributes
-  sizeId: number;
-  colorId: number;
+  sizeId?: number;
+  colorId?: number;
 
   // Pricing and quantity
   unitPrice: number;
