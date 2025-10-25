@@ -97,7 +97,6 @@ export class Order {
   @Column()
   customerId: number;
 
-  // Updated products structure
   @Column({ type: 'json' })
   products: OrderProduct[];
 
