@@ -35,11 +35,11 @@ export class Product extends BaseEntity {
   @Column({ default: ProductStatus.IN_STOCK })
   availability?: ProductStatus;
 
-  @Column()
-  categoryId: number;
+  // @Column()
+  // categoryId: number;
 
-  @Column()
-  subcategoryId: number;
+  // @Column()
+  // subcategoryId: number;
 
   // FAQ relationship
   @OneToMany(() => FAQ, (faq) => faq.product, { cascade: true })
