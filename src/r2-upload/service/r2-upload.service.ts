@@ -92,15 +92,11 @@ export class R2UploadService {
   // upload image method
   async uploadImage(
     file: Express.Multer.File,
-    adminId: number,
+    id: number,
     folderName: string,
   ): Promise<string> {
-    const key = this.generateKey(folderName, adminId, file.originalname);
+    const key = this.generateKey(folderName, id, file.originalname);
     return this.uploadFile(file, key);
   }
 
-  async uploadProductImage(file: Express.Multer.File): Promise<string> {
-    const key = this.generateKey('product', 0, file.originalname);
-    return this.uploadFile(file, key);
-  }
 }

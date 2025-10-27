@@ -13,13 +13,15 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('product')
 export class Product extends BaseEntity {
   @Column()
   name: string;
+
+  @Column({ nullable: true ,type:'json'})
+  images?: string[];
 
   @Column()
   productCode?: string;
@@ -33,11 +35,11 @@ export class Product extends BaseEntity {
   @Column({ default: ProductStatus.IN_STOCK })
   availability?: ProductStatus;
 
-  @Column()
-  categoryId: number;
+  // @Column()
+  // categoryId: number;
 
-  @Column()
-  subcategoryId: number;
+  // @Column()
+  // subcategoryId: number;
 
   // FAQ relationship
   @OneToMany(() => FAQ, (faq) => faq.product, { cascade: true })
