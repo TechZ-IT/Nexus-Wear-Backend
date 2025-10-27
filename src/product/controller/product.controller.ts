@@ -14,8 +14,8 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../entity/product.entity';
 
-@ApiTags('Products')
-@Controller('products')
+@ApiTags('Product')
+@Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
