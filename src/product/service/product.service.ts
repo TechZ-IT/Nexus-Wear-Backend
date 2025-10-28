@@ -82,11 +82,47 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.productRepository.find({
-      relations: ['category', 'subCategory', 'colors', 'sizes', 'faqs'],
-      order: { createdAt: 'DESC' },
-    });
+  async findAll({
+    limit = 0,
+    page = 0,
+    status,
+  }: {
+    limit: number;
+    page: number;
+    status?: number;
+  }): Promise<{
+    data: Product[];
+    limit: number;
+    page: number;
+    total: number;
+  }> {
+    const query = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.subCategory', 'subCategory')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.faqs', 'faqs')
+      .orderBy('product.createdAt', 'DESC');
+
+    // Optional status filter
+    if (status) {
+      query.andWhere('product.status = :status', { status });
+    }
+
+    // Pagination
+    if (page && limit) {
+      query.skip((page - 1) * limit).take(limit);
+    }
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      data,
+      limit,
+      page,
+      total,
+    };
   }
 
   async findOne(id: number): Promise<Product> {

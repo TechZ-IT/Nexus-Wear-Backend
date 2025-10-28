@@ -69,7 +69,6 @@ export class Order {
   })
   paymentType: PaymentType;
 
-  // Calculate total order amount
   @Column()
   totalAmount: number;
 
