@@ -20,7 +20,7 @@ import { OrderService } from '../service/order.service';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { Order } from '../entity/order.entity';
 
-@ApiTags('Orders')
+@ApiTags('Order')
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
@@ -37,20 +37,37 @@ export class OrderController {
     return this.orderService.createOrder(createOrderDto);
   }
 
-  // Get All Orders (optional filter by customerId)
+  // Get All Orders 
   @Get()
-  @ApiOperation({ summary: 'Get all orders or filter by customer ID' })
+  @ApiOperation({
+    summary: 'Get all orders (with pagination & optional customer filter)',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+  })
   @ApiQuery({
     name: 'customerId',
     required: false,
     type: Number,
-    description: 'Filter orders by customer ID',
   })
-  @ApiResponse({ status: 200, description: 'List of orders', type: [Order] })
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated list of orders',
+    type: [Order],
+  })
   async getAllOrders(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
     @Query('customerId') customerId?: number,
-  ): Promise<Order[]> {
-    return this.orderService.getAllOrders(customerId);
+  ) {
+    return this.orderService.getAllOrders({ limit, page, customerId });
   }
 
   // Get Single Order by ID

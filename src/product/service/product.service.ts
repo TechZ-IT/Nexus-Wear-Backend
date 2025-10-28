@@ -32,9 +32,6 @@ export class ProductService {
     private readonly sizeRepository: Repository<Size>,
   ) {}
 
-  /**
-   * ✅ Create a new product
-   */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const {
       name,
@@ -85,19 +82,49 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  /**
-   * ✅ Get all products with relations
-   */
-  async findAll(): Promise<Product[]> {
-    return this.productRepository.find({
-      relations: ['category', 'subCategory', 'colors', 'sizes', 'faqs'],
-      order: { createdAt: 'DESC' },
-    });
+  async findAll({
+    limit = 0,
+    page = 0,
+    status,
+  }: {
+    limit: number;
+    page: number;
+    status?: number;
+  }): Promise<{
+    data: Product[];
+    limit: number;
+    page: number;
+    total: number;
+  }> {
+    const query = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category')
+      .leftJoinAndSelect('product.subCategory', 'subCategory')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.faqs', 'faqs')
+      .orderBy('product.createdAt', 'DESC');
+
+    // Optional status filter
+    if (status) {
+      query.andWhere('product.status = :status', { status });
+    }
+
+    // Pagination
+    if (page && limit) {
+      query.skip((page - 1) * limit).take(limit);
+    }
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      data,
+      limit,
+      page,
+      total,
+    };
   }
 
-  /**
-   * ✅ Get single product by ID
-   */
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id },
@@ -107,9 +134,6 @@ export class ProductService {
     return product;
   }
 
-  /**
-   * ✅ Update existing product
-   */
   async update(
     id: number,
     updateProductDto: UpdateProductDto,
@@ -172,9 +196,6 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  /**
-   * ✅ Delete a product
-   */
   async remove(id: number): Promise<{ message: string }> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) throw new NotFoundException('Product not found');

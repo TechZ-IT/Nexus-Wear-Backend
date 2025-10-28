@@ -6,6 +6,19 @@ import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('payment')
 export class Payment extends BaseEntity {
+  
+  @Column()
+  email: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  phoneNumber: string;
+
+  @Column()
+  addressLine: string;
+
   @Column({ unique: true })
   transactionId: string;
 
@@ -26,10 +39,10 @@ export class Payment extends BaseEntity {
   })
   status: PaymentStatus;
 
-  @Column({ nullable: true })
+  @Column()
   orderId: number;
 
-  @Column({ nullable: true })
+  @Column()
   customerId: number;
 
   @ManyToOne(() => Order, { onDelete: 'CASCADE', nullable: true })

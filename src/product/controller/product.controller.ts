@@ -7,8 +7,9 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ProductService } from '../service/product.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
@@ -19,9 +20,6 @@ import { Product } from '../entity/product.entity';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  /**
-   * ✅ Create a new product
-   */
   @Post()
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({
@@ -33,23 +31,41 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
-  /**
-   * ✅ Get all products
-   */
   @Get()
-  @ApiOperation({ summary: 'Get all products' })
+  @ApiOperation({
+    summary: 'Get all products with pagination and optional status filter',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of products per page',
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Current page number',
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    type: Number,
+    description: 'Filter by product status',
+  })
   @ApiResponse({
     status: 200,
-    description: 'List of all products',
+    description: 'Paginated list of products',
     type: [Product],
   })
-  async findAll(): Promise<Product[]> {
-    return this.productService.findAll();
+  async findAll(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+    @Query('status') status?: number,
+  ) {
+    return this.productService.findAll({ page, limit, status });
   }
 
-  /**
-   * ✅ Get product by ID
-   */
   @Get(':id')
   @ApiOperation({ summary: 'Get product details by ID' })
   @ApiResponse({
@@ -61,9 +77,6 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-  /**
-   * ✅ Update a product
-   */
   @Patch(':id')
   @ApiOperation({ summary: 'Update an existing product' })
   @ApiResponse({
