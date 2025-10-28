@@ -32,9 +32,6 @@ export class ProductService {
     private readonly sizeRepository: Repository<Size>,
   ) {}
 
-  /**
-   * ✅ Create a new product
-   */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const {
       name,
@@ -85,9 +82,6 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  /**
-   * ✅ Get all products with relations
-   */
   async findAll(): Promise<Product[]> {
     return this.productRepository.find({
       relations: ['category', 'subCategory', 'colors', 'sizes', 'faqs'],
@@ -95,9 +89,6 @@ export class ProductService {
     });
   }
 
-  /**
-   * ✅ Get single product by ID
-   */
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id },
@@ -107,9 +98,6 @@ export class ProductService {
     return product;
   }
 
-  /**
-   * ✅ Update existing product
-   */
   async update(
     id: number,
     updateProductDto: UpdateProductDto,
@@ -172,9 +160,6 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  /**
-   * ✅ Delete a product
-   */
   async remove(id: number): Promise<{ message: string }> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) throw new NotFoundException('Product not found');

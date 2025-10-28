@@ -30,20 +30,45 @@ export class OrderService {
   }
 
   //  Get all orders
-  async getAllOrders(customerId?: number): Promise<Order[]> {
-    if (customerId) {
-      return this.orderRepository.find({
-        where: { customerId },
-        relations: ['customer'],
-        order: { createdAt: 'DESC' },
-      });
-    }
+async getAllOrders({
+  limit = 0,
+  page = 0,
+  customerId,
+}: {
+  limit: number;
+  page: number;
+  customerId?: number;
+}): Promise<{
+  data: Order[];
+  limit: number;
+  page: number;
+  total: number;
+}> {
+  const query = this.orderRepository
+    .createQueryBuilder('order')
+    .leftJoinAndSelect('order.customer', 'customer')
+    .orderBy('order.createdAt', 'DESC');
 
-    return this.orderRepository.find({
-      relations: ['customer'],
-      order: { createdAt: 'DESC' },
-    });
+  // Optional filter by customer ID
+  if (customerId) {
+    query.andWhere('order.customerId = :customerId', { customerId });
   }
+
+  // Pagination logic
+  if (page && limit) {
+    query.skip((page - 1) * limit).take(limit);
+  }
+
+  const [data, total] = await query.getManyAndCount();
+
+  return {
+    data,
+    limit,
+    page,
+    total,
+  };
+}
+
 
   // Get single order by ID
   async getOrderById(id: number): Promise<Order> {

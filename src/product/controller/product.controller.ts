@@ -19,9 +19,6 @@ import { Product } from '../entity/product.entity';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  /**
-   * ✅ Create a new product
-   */
   @Post()
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({
@@ -33,9 +30,6 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
-  /**
-   * ✅ Get all products
-   */
   @Get()
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({
@@ -47,9 +41,6 @@ export class ProductController {
     return this.productService.findAll();
   }
 
-  /**
-   * ✅ Get product by ID
-   */
   @Get(':id')
   @ApiOperation({ summary: 'Get product details by ID' })
   @ApiResponse({
@@ -61,9 +52,7 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-  /**
-   * ✅ Update a product
-   */
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update an existing product' })
   @ApiResponse({
