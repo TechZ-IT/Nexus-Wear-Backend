@@ -29,6 +29,7 @@ export enum OrderStatus {
   DELIVERED = 'delivered',
   REFUNDED = 'refunded',
 }
+
 export enum PaymentType {
   COD = 'COD',
   SSL = 'SSL',
