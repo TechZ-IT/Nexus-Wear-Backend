@@ -13,6 +13,7 @@ import Stripe from 'stripe';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { CreateOrderDto } from 'src/order/dto/create-order.dto';
+import * as qs from 'qs';
 
 @Injectable()
 export class PaymentService {
@@ -26,7 +27,7 @@ export class PaymentService {
     private readonly orderRepo: Repository<Order>,
 
     private readonly configService: ConfigService,
-    private readonly orderService: OrderService, 
+    private readonly orderService: OrderService,
   ) {
     const stripeKey = this.configService.get<string>('STRIPE_SECRET_KEY');
     if (!stripeKey) {
@@ -36,7 +37,7 @@ export class PaymentService {
   }
 
   // Initiate payment — creates order automatically then initiates payment
-   
+
   async initiatePayment(createOrderDto: CreateOrderDto) {
     //  Create the Order first
     const order = await this.orderService.createOrder(createOrderDto);
@@ -173,16 +174,32 @@ export class PaymentService {
         success_url: `${this.configService.get('BACKEND_URL')}/payment/success?transactionId=${payment.transactionId}`,
         fail_url: `${this.configService.get('BACKEND_URL')}/payment/fail`,
         cancel_url: `${this.configService.get('BACKEND_URL')}/payment/cancel`,
+
         cus_name: payment.name,
         cus_email: payment.email,
         cus_phone: payment.phoneNumber,
         cus_add1: payment.addressLine,
+        cus_city: 'Dhaka',
+        cus_country: 'Bangladesh',
+
+        // ✅ Shipping info
+        shipping_method: 'Courier',
+        ship_name: payment.name,
+        ship_add1: payment.addressLine,
+        ship_city: 'Dhaka',
+        ship_country: 'Bangladesh',
+        ship_postcode: '1205', // ✅ Required!
+
         product_name: `Order #${payment.orderId}`,
         product_category: 'General',
         product_profile: 'general',
       };
 
-      const response = await axios.post(sslUrl, postData);
+      const response = await axios.post(sslUrl, qs.stringify(postData), {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      });
+
+
       return { url: response.data.GatewayPageURL, payment };
     } catch (err) {
       throw new InternalServerErrorException(
