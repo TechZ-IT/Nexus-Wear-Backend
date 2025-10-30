@@ -42,10 +42,26 @@ export class UpdateProductDto {
   @IsString()
   description?: string;
 
-  @ApiPropertyOptional({ example: 1500, description: 'Price of the product' })
+  @ApiPropertyOptional({
+    example: 1500,
+    description: 'Discounted or selling Price of the product',
+  })
   @IsOptional()
   @IsNumber()
   price?: number;
+
+  @ApiPropertyOptional({
+    example: 1500,
+    description: 'Real Price of the product',
+  })
+  @IsOptional()
+  @IsNumber()
+  originalPrice?: number;
+
+  @ApiPropertyOptional({ example: 1500, description: 'Rating of the product' })
+  @IsOptional()
+  @IsNumber()
+  rating?: number;
 
   @ApiPropertyOptional({
     enum: ProductStatus,

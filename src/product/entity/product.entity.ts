@@ -20,7 +20,7 @@ export class Product extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ nullable: true ,type:'json'})
+  @Column({ nullable: true, type: 'json' })
   images?: string[];
 
   @Column()
@@ -28,6 +28,9 @@ export class Product extends BaseEntity {
 
   @Column()
   description: string;
+
+  @Column({ nullable: true })
+  originalPrice?: number;
 
   @Column()
   price: number;
@@ -72,6 +75,9 @@ export class Product extends BaseEntity {
   // Analytics
   @Column({ type: 'bigint', default: 0 })
   viewCount: number;
+
+  @Column({ nullable: true })
+  rating?: number;
 
   @Column({ nullable: true })
   lastViewedAt: string;
