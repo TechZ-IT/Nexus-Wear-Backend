@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsEnum,
@@ -41,9 +41,19 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
+  @ApiPropertyOptional({ example: 1200, description: 'Price of the product' })
+  @IsOptional()
+  @IsNumber()
+  originalPrice: number;
+
   @ApiProperty({ example: 1200, description: 'Price of the product' })
   @IsNumber()
   price: number;
+
+  @ApiProperty({ example: 10, description: 'Rating of the product' })
+  @IsOptional()
+  @IsNumber()
+  rating: number;
 
   @ApiProperty({
     enum: ProductStatus,

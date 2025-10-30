@@ -146,4 +146,65 @@ export class CustomerService {
     }
     return customer;
   }
+
+  // ✅ Update (PATCH) Customer
+  async update(
+    id: number,
+    updateData: Partial<CreateCustomerDto>,
+    imageFile?: Express.Multer.File,
+  ) {
+    const customer = await this.findOne(id);
+    if (!customer) {
+      throw new NotFoundException(`Customer with ID ${id} not found`);
+    }
+
+    // If password is being updated, hash it
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+
+    // If image file is uploaded, upload and update URL
+    let image: string | undefined = customer.image;
+    if (imageFile) {
+      const imageUploadResult = await this.r2UploadService.uploadImage(
+        imageFile,
+        id,
+        'customer',
+      );
+      if (imageUploadResult) {
+        image = imageUploadResult;
+      }
+    }
+
+    await this.customerRepository.update(id, { ...updateData, image: image });
+    const updatedCustomer = await this.findOne(id);
+
+    return {
+      data: updatedCustomer,
+      message: 'Customer updated successfully',
+      status: 'success',
+    };
+  }
+
+  // ✅ Soft Delete Customer
+  async softDelete(id: number) {
+    const customer = await this.findOne(id);
+    await this.customerRepository.softRemove(customer);
+
+    return {
+      message: 'Customer soft deleted successfully',
+      status: 'success',
+    };
+  }
+
+  // ✅ Hard Delete Customer
+  async hardDelete(id: number) {
+    const customer = await this.findOne(id);
+    await this.customerRepository.remove(customer);
+
+    return {
+      message: 'Customer permanently deleted successfully',
+      status: 'success',
+    };
+  }
 }
